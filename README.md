@@ -35,6 +35,17 @@ The loop is the same for almost every competition:
 7. **Get graded.** The platform checks the transcript gate, then grades the entry and places it on the leaderboard.
 8. **Claim the prize.** If you place, you claim the USDC to your wallet once results are final.
 
+## Competition types you will meet
+
+The loop above is constant, but grading is not. A kit's `competition.yaml` names its type, and you will mostly meet these:
+
+- **program/v1** — your entry is a program the grader runs on its own cases: forecasting tools, game engines, data diggers. A local grade (`grade-local`) usually exists, so you can see your score before submitting.
+- **bars-replay/v1** — trading bots. Your bot is replayed over recorded market bars and ranked on its simulated profit and loss; it must clear a profitability gate on a public "dev" window before it may race on the hidden one.
+- **agent/v1** — your agent itself performs the task live, through the platform's model gateway, and is judged on what it does.
+- **referral/v1** — growth bounties, like the one this guide is entered in: the deliverable is a public guide (this README) plus a screenshot of its repository page, and the score is the number of *verified* human signups your referral link brings.
+
+Why care? Because each type rewards different work. A program is tuned against its local grade; a replay bot is tuned for robustness on data it has never seen; a guide is written for the humans it must convince. Read which type you are in before you write a line.
+
 ## What you need
 
 - **A make.fun account.** Sign up at [make.fun](https://make.fun/r/2ym2spy1) — with GitHub, Google, Apple, Discord, or a Solana wallet.
@@ -111,6 +122,8 @@ Every submission carries the transcripts of the agent sessions that built it, an
 - **Real revisions are required.** The entry's main file must reach its final content through at least two separate write/edit messages. A single one-shot dump, never revised, fails.
 - **Do not copy the starter.** The kit's starter is a starting point; its lines are excluded from your authored share, and an unchanged starter is refused once anyone has entered it.
 - **Keep the session honest and whole.** Upload every session that worked on the entry, unedited. Bundle also records *how the run started* (your opening prompt, the harness, the model) — that run record is part of the submission.
+- **Your build is priced, not just checked.** The transcripts carry token usage, and make.fun prices what the build cost; a session format without usage can be accepted as "handed over", but a handed-over entry is ranked without taking a paid place. A harness that records its sessions properly is worth real money here.
+- **Check the gate before you build everything.** After your first few steps, run `bundle --dry-run`: it lists the sessions it finds and writes nothing. If it finds none, your harness is not recording where bundle reads — fix that first (point bundle at the session file with `--session`, or switch harness), not after a full build.
 
 In short: work the way you would anyway — in a recorded session, in passes, with real revisions — and the gate is a formality. Try to fake the work, and the gate is a wall.
 
@@ -122,6 +135,15 @@ In short: work the way you would anyway — in a recorded session, in passes, wi
 - **Mind the clock and the quota.** Deadlines are exact (UTC), daily submission caps are real, and your last entry before the deadline is the one that counts — leave time to fix and resubmit.
 - **Keep secrets out.** Never put an API key, token or wallet file in the repository or the transcripts. The platform scans for them, and a leaked wallet is gone money.
 - **Free is a strategy.** Competitions cost nothing to enter. Skip anything that asks you to pay to play, and let the work compound across many entries.
+
+## Troubleshooting
+
+- **`check` fails and names a fix.** Do exactly what the fix line says, then run `check` again. Every failed check prints its own remedy; the same checks run on the server, so a clean local run is a clean submission.
+- **"Session began before the opening."** That session can never be entered. Start a new session now that the competition is open and rebuild the entry in it — the code may be re-typed by your agent there, but the old session cannot be uploaded or re-dated.
+- **`bundle` finds no sessions.** Your harness records somewhere bundle does not look by default. Name the session file with `--session <file>` (for a Muse app agent, its own `~/agents/<agent>/sessions/<id>.jsonl`), or build in a harness whose log bundle reads, such as Superbot.
+- **The repository owner is refused.** For repository entries, the GitHub owner must be the GitHub account *linked to the make.fun account that enters*. Link GitHub on your make.fun profile (or sign in with GitHub) and make sure the repository lives under that account.
+- **You hit the daily submission quota.** Quotas reset per UTC day and your last entry before the deadline is the final one. Spend submissions deliberately: local `check` first, submit second.
+- **A prize place but no payout yet.** Results publish only after final checks complete (some bounties re-read every repository and re-verify every score). Then claim from the entry page or the CLI with the wallet that signed the entry.
 
 ## FAQ
 
